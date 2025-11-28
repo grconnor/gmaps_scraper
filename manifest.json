@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Google Maps Business Scraper",
+  "version": "1.0",
+  "description": "Scrape business info from Google Maps search results",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.google.com/*",
+    "https://www.google.co.za/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.google.com/maps/*",
+        "https://www.google.co.za/maps/*"
+      ],
+      "js": ["content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "commands": {
+    "stop-scraper": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Stop the scraper"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "/favicon-16x16.png",
+    "32": "/favicon-32x32.png",
+    "48": "/favicon.ico"
+  }
+}
