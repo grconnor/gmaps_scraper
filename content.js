@@ -265,11 +265,34 @@ class GoogleMapsScraper {
     }
 
     // Get all links to check for social media
+    const socialDomains = [
+      "facebook.com",
+      "instagram.com",
+      "twitter.com",
+      "x.com",
+      "linkedin.com",
+      "youtube.com",
+      "tiktok.com",
+      "whatsapp.com",
+      "telegram.com",
+      "snapchat.com",
+      "facebook.com",
+      "ubereats.com",
+      "dineplan.com",
+      "dining-out.co.za",
+      "menunprice.co.za",
+      "resto.co.za",
+    ];
+
     const allLinks = [...document.querySelectorAll('a[href^="http"]')].map(
       (a) => a.href
     );
+
     const socialLinks = allLinks.filter(
-      (link) => !this.isRealWebsite(link) && link !== website
+      (link) =>
+        socialDomains.some((domain) => link.includes(domain)) &&
+        !this.isRealWebsite(link) &&
+        link !== website
     );
 
     return {
