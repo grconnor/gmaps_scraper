@@ -267,6 +267,7 @@ class GoogleMapsScraper {
     // Get all links to check for social media
     const socialDomains = [
       "facebook.com",
+      "fb.com",
       "instagram.com",
       "twitter.com",
       "x.com",
@@ -288,12 +289,27 @@ class GoogleMapsScraper {
       (a) => a.href
     );
 
-    const socialLinks = allLinks.filter(
-      (link) =>
-        socialDomains.some((domain) => link.includes(domain)) &&
-        !this.isRealWebsite(link) &&
-        link !== website
-    );
+    const socialLinks = allLinks.filter((link) => {
+      try {
+        const url = new URL(link);
+        const domain = url.hostname.toLowerCase();
+
+        return (
+          socialDomains.some((social) => domain.includes(social)) &&
+          !domain.includes("google.com") &&
+          !domain.includes("google.co")
+        );
+      } catch {
+        return false;
+      }
+    });
+
+    // const socialLinks = allLinks.filter(
+    //   (link) =>
+    //     socialDomains.some((domain) => link.includes(domain)) &&
+    //     !this.isRealWebsite(link) &&
+    //     link !== website
+    // );
 
     return {
       name,
@@ -433,7 +449,7 @@ class GoogleMapsScraper {
       if (items.length === 0) {
         consecutiveNoNewItems++;
 
-        if (consecutiveNoNewItems >= 3) {
+        if (consecutiveNoNewItems >= 5) {
           this.setStatus("No more items found. Finishing...", "warning");
           await this.wait(2000);
           break;
@@ -468,7 +484,7 @@ class GoogleMapsScraper {
         await this.clickBack();
 
         this.index++;
-        await this.wait(800); // Delay between items
+        await this.wait(1000); // Delay between items
       } catch (error) {
         console.error("Error scraping item:", error);
         await this.clickBack();
